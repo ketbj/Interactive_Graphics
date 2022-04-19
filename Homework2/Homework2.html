@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<title>IG Homework2 - Scratching Bear</title>
+<div>
+<button id = "animationOn">BeginAnimation</button>
+<button id = "animationOff">PauseAnimation</button>
+</div>
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec2 aTexCoord;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+out vec2 vTexCoord;
+
+void main()
+{
+    vTexCoord = aTexCoord;
+    gl_Position = projectionMatrix * modelViewMatrix * aPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+in vec2 vTexCoord;
+
+uniform sampler2D uTextureMap1; //Texture for the leaves/branch of the tree
+uniform sampler2D uTextureMap2; //Texture for the trunk
+uniform sampler2D uTextureMap3; //Texture for the bear's head
+uniform sampler2D uTextureMap4; //Texture for the bear's fur
+uniform sampler2D uTextureMap5; //Texture for the background
+
+uniform bool trunkBool;
+uniform bool branchBool;
+uniform bool bearHeadBool;
+uniform bool bearBool;
+
+out vec4 fColor;
+
+void main()
+{
+  if(branchBool){
+    fColor = texture(uTextureMap1, vTexCoord);  //If the control is ok we give the leaves texture to the fragment
+    }
+  else if (trunkBool){
+    fColor = texture(uTextureMap2, vTexCoord);  //Here we give the trunk texture
+    }
+  else if(bearHeadBool){
+      fColor = texture(uTextureMap3, vTexCoord);  //Here the bear's head
+  }
+  else if(bearBool){
+    fColor = texture(uTextureMap4, vTexCoord);  //Here the bear's fur
+    }
+  else fColor = texture(uTextureMap5, vTexCoord); //The object left is the background
+
+}
+</script>
+
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MVnew.js"></script>
+<script type="text/javascript" src="Homework2.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="1024" height="720">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<img id = "Background" src = "back.jpg" hidden></img>
+<img id = "BearImage" src = "bear2.jpg" hidden></img>
+<img id = "BearHeadImage" src = "bearHead.jpg" hidden></img>
+<img id = "TrunkImage" src = "tree.jpg" hidden></img>
+<img id = "BranchImage" src = "leaves2.jpg" hidden></img>
+</body>
+</html>
